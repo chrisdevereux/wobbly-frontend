@@ -1,6 +1,10 @@
 module.exports = {
   client: {
     name: "Wobbly",
-    service: "wobbly-backend"
+    service: {
+      name: "Wobbly Staging",
+      url: "http://develop.wobbly.app",
+      skipSSLValidation: true
+    }
   }
 };
