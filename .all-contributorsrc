@@ -15,7 +15,21 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/1309951?v=4",
       "profile": "https://btao.org",
       "contributions": [
-        "code"
+        "code",
+        "infra",
+        "review"
+      ]
+    },
+    {
+      "login": "King-Mob",
+      "name": "John Evans",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/38507954?v=4",
+      "profile": "http://bananananaba.com",
+      "contributions": [
+        "content",
+        "business",
+        "ideas",
+        "review"
       ]
     },
     {
