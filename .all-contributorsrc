@@ -17,6 +17,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "chrisdevereux",
+      "name": "Chris Devereux",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/361391?v=4",
+      "profile": "http://coderwall.com/chrisdevereux",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7
