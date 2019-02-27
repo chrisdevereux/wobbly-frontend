@@ -1,6 +1,6 @@
 import moment from "moment";
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { BubbleProps, utils } from "react-native-gifted-chat";
 
 import { colors } from "../../style/common";
@@ -26,11 +26,15 @@ export default class PostBubble extends React.PureComponent<BubbleProps> {
     if (isSameUser(currentMessage!, previousMessage!) && isSameDay(currentMessage, previousMessage)) {
       return;
     }
-    return <Text style={style.name}>{this.props.currentMessage!.user.name}</Text>;
+    return <WobblyText style={style.name}>{this.props.currentMessage!.user.name}</WobblyText>;
   };
 
   private renderTime = () => {
-    if (!this.props.currentMessage!.createdAt) {
+    const { currentMessage, previousMessage } = this.props;
+    if (
+      !this.props.currentMessage!.createdAt ||
+      (isSameUser(currentMessage, previousMessage) && isSameDay(currentMessage, previousMessage))
+    ) {
       return;
     }
     const { containerStyle, wrapperStyle, ...timeProps } = this.props;
@@ -40,7 +44,7 @@ export default class PostBubble extends React.PureComponent<BubbleProps> {
     const createdAt = moment(timeProps.currentMessage!.createdAt);
     return (
       <View style={style.timeContainer}>
-        <Text style={style.time}>{createdAt.format("HH:mm")}</Text>
+        <WobblyText style={style.time}>{createdAt.format("HH:mm")}</WobblyText>
       </View>
     );
   };
@@ -57,11 +61,11 @@ const style = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    alignItems: "flex-end"
+    alignItems: "center"
   },
   name: {
     fontWeight: "bold",
-    fontSize: 12,
+    // fontSize: 14,
     marginRight: 10
   },
   timeContainer: {

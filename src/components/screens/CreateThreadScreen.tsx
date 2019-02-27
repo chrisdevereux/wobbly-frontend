@@ -3,8 +3,8 @@ import { Formik, FormikProps } from "formik";
 import hoistNonReactStatics from "hoist-non-react-statics";
 import { values } from "lodash";
 import * as React from "react";
-import { ActivityIndicator, View } from "react-native";
 import { Button } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { NavigationInjectedProps } from "react-navigation";
 import * as yup from "yup";
 
@@ -19,6 +19,7 @@ import {
 import { THREADS_QUERY } from "../../graphql/queries";
 import { NavigationService } from "../../services";
 import { FormErrors, FormField, FormLabel, WobblyButton } from "../atoms";
+import { Intent } from "../atoms/WobblyButton";
 
 interface ICreateThreadFormFields {
   title: string;
@@ -53,16 +54,25 @@ class CreateThreadScreen extends React.Component<ICreateThreadScreenProps> {
         })}
       >
         {(formikBag: FormikProps<ICreateThreadFormFields>) => (
-          <View>
+          <KeyboardAwareScrollView>
             <FormErrors errors={values(formikBag.errors)} />
             <FormLabel>Title</FormLabel>
             <FormField onChangeText={formikBag.handleChange("title")} value={formikBag.values.title} />
             <FormLabel>Content</FormLabel>
-            <FormField onChangeText={formikBag.handleChange("content")} value={formikBag.values.content} />
-            <WobblyButton onPress={formikBag.handleSubmit} disabled={result.loading}>
-              {result.loading ? <ActivityIndicator /> : "Submit"}
-            </WobblyButton>
-          </View>
+            <FormField
+              onChangeText={formikBag.handleChange("content")}
+              value={formikBag.values.content}
+              multiline={true}
+              multilineGrow={true}
+            />
+            <WobblyButton
+              intent={Intent.PRIMARY}
+              text="Submit"
+              isLoading={result.loading}
+              onPress={formikBag.handleSubmit}
+              disabled={result.loading}
+            />
+          </KeyboardAwareScrollView>
         )}
       </Formik>
     );

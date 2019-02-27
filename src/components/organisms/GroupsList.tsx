@@ -5,6 +5,7 @@ import { ListItem } from "react-native-elements";
 
 import { getGroups_groups } from "../../generated/getGroups";
 import { searchGroups_searchGroups } from "../../generated/searchGroups";
+import WobblyText from "../atoms/WobblyText";
 
 interface IGroupsListProps {
   groups: getGroups_groups[] | searchGroups_searchGroups[];
@@ -37,8 +38,8 @@ class GroupsList extends React.PureComponent<IGroupsListProps> {
         : item.description || undefined;
     return (
       <ListItem
-        title={item.name}
-        subtitle={subtitle}
+        title={<WobblyText>{item.name}</WobblyText>}
+        subtitle={<WobblyText>{subtitle}</WobblyText>}
         onPress={onPress}
         leftAvatar={{ rounded: true, icon: { name: "home" } }}
         rightIcon={{ name: "chevron-right" }}

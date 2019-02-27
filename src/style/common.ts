@@ -42,22 +42,3 @@ export const colors = {
   red4: "#F55656",
   red5: "#FF7373"
 };
-
-export const standardColors = {
-  primaryButtonBackground: colors.blue3,
-  primaryButtonText: colors.white,
-  primaryText: colors.black,
-  disabledButtonBackground: colors.gray5,
-  disabledButtonText: colors.gray1
-};
-
-export const fontSizes = {
-  small: 12,
-  button: 17,
-  medium: 18,
-  large: 28,
-  h1: 48,
-  h2: 36,
-  h3: 24,
-  h4: 20
-};

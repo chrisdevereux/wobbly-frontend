@@ -20,6 +20,7 @@ import {
 } from "../../graphql/queries";
 import { NavigationService } from "../../services";
 import { WobblyButton } from "../atoms";
+import { Intent } from "../atoms/WobblyButton";
 import WobblyText from "../atoms/WobblyText";
 import { ErrorState } from "../organisms";
 
@@ -64,9 +65,13 @@ class JoinGroupScreen extends React.PureComponent<IJoinGroupScreenProps> {
     return (
       <View style={style.container}>
         {descriptionContainer}
-        <WobblyButton disabled={mutationResult.loading} onPress={this.handleJoinGroup}>
-          {mutationResult.loading ? <ActivityIndicator /> : "Join this group"}
-        </WobblyButton>
+        <WobblyButton
+          text="Join this group"
+          isLoading={mutationResult.loading}
+          intent={Intent.PRIMARY}
+          disabled={mutationResult.loading}
+          onPress={this.handleJoinGroup}
+        />
       </View>
     );
   }

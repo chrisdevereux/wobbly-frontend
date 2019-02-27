@@ -11,11 +11,11 @@ import {
   ConfirmEmailMutationResult
 } from "../../graphql/mutations";
 import { OWN_INFO_QUERY, OwnInfoQuery, OwnInfoQueryResult } from "../../graphql/queries";
-import { colors } from "../../style/common";
 import { WobblyButton } from "../atoms";
 import FormErrors from "../atoms/FormErrors";
 import FormField from "../atoms/FormField";
 import FormLabel from "../atoms/FormLabel";
+import { Intent } from "../atoms/WobblyButton";
 
 export interface ISettingsFields {
   confirmationCode: string;
@@ -65,11 +65,14 @@ class SettingsScreen extends React.PureComponent<ISettingsProps> {
               disabled={this.state.emailConfirmed}
               onChangeText={formikBag.handleChange("confirmationCode")}
               value={formikBag.values.confirmationCode}
-              backgroundColor={colors.lightGray1}
             />
-            <WobblyButton disabled={this.state.emailConfirmed} onPress={formikBag.handleSubmit}>
-              {this.state.emailConfirmed ? "Good job!" : "Submit"}
-            </WobblyButton>
+            <WobblyButton
+              text="Submit"
+              intent={Intent.PRIMARY}
+              isLoading={this.props.ownInfoResult.loading}
+              disabled={this.state.emailConfirmed}
+              onPress={formikBag.handleSubmit}
+            />
           </View>
         )}
       </Formik>

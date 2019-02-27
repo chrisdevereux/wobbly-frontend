@@ -1,27 +1,47 @@
 import * as React from "react";
 import { StyleSheet, Text, TextProps } from "react-native";
+import { human } from "react-native-typography";
 
 import { colors } from "../../style/common";
 
 interface IWobblyText extends TextProps {
-  h1?: boolean;
-  h2?: boolean;
-  h3?: boolean;
-  h4?: boolean;
+  text?: string;
+  largeTitle?: boolean;
+  title1?: boolean;
+  title2?: boolean;
+  title3?: boolean;
+  headline?: boolean;
+  callout?: boolean;
+  subhead?: boolean;
   listHeading?: boolean;
 }
-const WobblyText: React.FC<IWobblyText> = ({ h1, h2, h3, h4, listHeading, children, style, ...rest }) => {
-  const isHeading = h1 || h2 || h3 || h4;
+const WobblyText: React.FC<IWobblyText> = ({
+  largeTitle,
+  title1,
+  title2,
+  title3,
+  headline,
+  callout,
+  subhead,
+  listHeading,
+  children,
+  style,
+  ...rest
+}) => {
+  const isHeading = largeTitle || title1 || title2 || title3;
   return (
     <Text
       style={StyleSheet.flatten([
-        styles.text,
-        isHeading && styles.heading,
-        h1 && styles.h1,
-        h2 && styles.h2,
-        h3 && styles.h3,
-        h4 && styles.h4,
+        human.body,
+        largeTitle && human.largeTitle,
+        title1 && human.title1,
+        title2 && human.title2,
+        title3 && human.title3,
+        headline && human.headline,
+        callout && human.callout,
+        subhead && human.subhead,
         listHeading && styles.listHeading,
+        isHeading && styles.heading,
         style && style
       ])}
       {...rest}
@@ -32,23 +52,8 @@ const WobblyText: React.FC<IWobblyText> = ({ h1, h2, h3, h4, listHeading, childr
 };
 
 const styles = StyleSheet.create({
-  text: {
-    // fontFamily: "montserrat-regular"
-  },
   heading: {
-    fontFamily: "open-sans-semi-bold"
-  },
-  h1: {
-    fontSize: 40
-  },
-  h2: {
-    fontSize: 34
-  },
-  h3: {
-    fontSize: 28
-  },
-  h4: {
-    fontSize: 22
+    fontFamily: "montserrat-bold"
   },
   listHeading: {
     fontSize: 14,

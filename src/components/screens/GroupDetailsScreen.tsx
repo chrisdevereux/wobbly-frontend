@@ -12,7 +12,11 @@ import {
   LeaveGroupMutation,
   LeaveGroupMutationFn,
   LeaveGroupMutationResult,
-  LeaveGroupMutationUpdaterFn
+  LeaveGroupMutationUpdaterFn,
+  UPDATE_GROUP_MUTATION,
+  UpdateGroupMutation,
+  UpdateGroupMutationFn,
+  UpdateGroupMutationResult
 } from "../../graphql/mutations";
 import { GROUP_DETAILS_QUERY, GroupDetailsQuery, GroupDetailsQueryResult, GROUPS_QUERY } from "../../graphql/queries";
 import { NavigationService } from "../../services";
@@ -22,9 +26,14 @@ import WobblyText from "../atoms/WobblyText";
 import { LoadingState, PersonList } from "../organisms";
 
 interface IGroupDetailsScreen extends NavigationInjectedProps {
+  // Group details query
   groupDetails: GroupDetailsQueryResult;
+  // Leave group mutation
   leaveGroup: LeaveGroupMutationFn;
   leaveGroupResult: LeaveGroupMutationResult;
+  // Update group mutation
+  updateGroup: UpdateGroupMutationFn;
+  updateGroupResult: UpdateGroupMutationResult;
 }
 class GroupDetailsScreen extends React.PureComponent<IGroupDetailsScreen> {
   public static navigationOptions = () => {
@@ -51,7 +60,7 @@ class GroupDetailsScreen extends React.PureComponent<IGroupDetailsScreen> {
         <ScrollView style={style.container}>
           <Image source={{ uri: "https://placeimg.com/600/200/nature" }} resizeMode="cover" style={style.groupImage} />
           <ListSection>
-            <ListItem title={<WobblyText h4={true}>{this.groupName}</WobblyText>} bottomDivider={true} />
+            <ListItem title={<WobblyText headline={true}>{this.groupName}</WobblyText>} bottomDivider={true} />
             <ListItem title={group.description || "Add a description"} bottomDivider={true} />
           </ListSection>
           <ListSection>
@@ -95,7 +104,7 @@ const style = StyleSheet.create({
   }
 });
 
-const updateCache: LeaveGroupMutationUpdaterFn = (cache, { data }) => {
+const leaveGroupUpdateCache: LeaveGroupMutationUpdaterFn = (cache, { data }) => {
   const prevData = cache.readQuery<getGroups>({ query: GROUPS_QUERY });
   const groups = (prevData && prevData.groups) || [];
   const leftGroupId = data!.leaveGroup.id;
@@ -110,16 +119,22 @@ const updateCache: LeaveGroupMutationUpdaterFn = (cache, { data }) => {
 const EnhancedComponent = ({ navigation }: NavigationInjectedProps) => (
   <GroupDetailsQuery query={GROUP_DETAILS_QUERY} variables={{ groupId: navigation.getParam("groupId") }}>
     {groupDetails => (
-      <LeaveGroupMutation mutation={LEAVE_GROUP_MUTATION} update={updateCache}>
-        {(leaveGroup, leaveGroupResult) => (
-          <GroupDetailsScreen
-            groupDetails={groupDetails}
-            leaveGroup={leaveGroup}
-            leaveGroupResult={leaveGroupResult}
-            navigation={navigation}
-          />
+      <UpdateGroupMutation mutation={UPDATE_GROUP_MUTATION} variables={{ groupId: navigation.getParam("groupId") }}>
+        {(updateGroup, updateGroupResult) => (
+          <LeaveGroupMutation mutation={LEAVE_GROUP_MUTATION} update={leaveGroupUpdateCache}>
+            {(leaveGroup, leaveGroupResult) => (
+              <GroupDetailsScreen
+                groupDetails={groupDetails}
+                leaveGroup={leaveGroup}
+                leaveGroupResult={leaveGroupResult}
+                updateGroup={updateGroup}
+                updateGroupResult={updateGroupResult}
+                navigation={navigation}
+              />
+            )}
+          </LeaveGroupMutation>
         )}
-      </LeaveGroupMutation>
+      </UpdateGroupMutation>
     )}
   </GroupDetailsQuery>
 );

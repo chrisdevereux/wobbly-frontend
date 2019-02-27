@@ -1,25 +1,57 @@
 import * as React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 
-import { colors, fontSizes, standardColors } from "../../style/common";
+import { colors } from "../../style/common";
+
+import WobblyText from "./WobblyText";
+
+export enum Intent {
+  PRIMARY = "PRIMARY",
+  SUCCESS = "SUCCESS",
+  WARNING = "WARNING",
+  DANGER = "DANGER"
+}
 
 interface IWobblyButtonProps {
-  children: React.ReactNode;
+  text: string;
+  isLoading?: boolean;
   onPress?: () => void;
   disabled?: boolean;
+  intent?: Intent;
+  minimal?: boolean;
 }
 /** The default RN button doesn't offer much customization so we use our own. */
-const WobblyButton = ({ onPress, disabled, children }: IWobblyButtonProps) => {
-  if (typeof children === "string") {
-    children = <Text style={style.buttonText}>{children}</Text>;
-  }
+const WobblyButton = ({ text, isLoading, intent, onPress, disabled, minimal }: IWobblyButtonProps) => {
+  text = minimal ? text.toUpperCase() : text;
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[style.button, disabled ? style.disabled : null]}
-      disabled={disabled || false}
+      style={[
+        style.button,
+        minimal && style.minimal,
+        !intent && !minimal && style.default,
+        intent === Intent.PRIMARY && style.primary,
+        intent === Intent.SUCCESS && style.success,
+        intent === Intent.WARNING && style.warning,
+        intent === Intent.DANGER && style.danger,
+        disabled && style.disabled
+      ]}
+      disabled={disabled || isLoading}
     >
-      {children}
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <WobblyText
+          style={[
+            style.buttonText,
+            minimal && style.minimalText,
+            intent && !minimal && style.whiteText,
+            disabled && style.disabledText
+          ]}
+        >
+          {text}
+        </WobblyText>
+      )}
     </TouchableOpacity>
   );
 };
@@ -29,15 +61,45 @@ const style = StyleSheet.create({
   button: {
     margin: 8,
     padding: 8,
-    borderRadius: 3,
-    backgroundColor: standardColors.primaryButtonBackground
+    borderRadius: 10,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  default: {
+    borderWidth: 1,
+    borderColor: colors.gray4
+  },
+  minimal: {},
+  minimalText: {
+    color: colors.gray3,
+    fontFamily: "open-sans-bold",
+    fontSize: 15
+  },
+  primary: {
+    backgroundColor: colors.blue4
+  },
+  success: {
+    backgroundColor: colors.green4
+  },
+  warning: {
+    backgroundColor: colors.orange4
+  },
+  danger: {
+    backgroundColor: colors.red4
   },
   disabled: {
-    backgroundColor: standardColors.disabledButtonBackground
+    backgroundColor: colors.lightGray1
+  },
+  disabledText: {
+    color: colors.gray2
   },
   buttonText: {
-    color: colors.white,
-    fontSize: fontSizes.button,
+    color: colors.black,
+    fontSize: 17,
     textAlign: "center"
+  },
+  whiteText: {
+    color: colors.white
   }
 });

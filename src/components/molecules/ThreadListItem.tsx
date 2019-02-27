@@ -13,6 +13,7 @@ import {
 } from "../../graphql/mutations";
 import { THREADS_QUERY } from "../../graphql/queries";
 import { colors } from "../../style/common";
+import WobblyText from "../atoms/WobblyText";
 
 /**
  * The props that consumers of this component need to pass
@@ -57,8 +58,8 @@ class ThreadListItem extends React.PureComponent<IThreadListItemProps, IThreadLi
     return (
       <ListItem
         leftIcon={leftIcon}
-        title={thread.title}
-        subtitle={`${mostRecentAuthor}: ${mostRecentPost}`}
+        title={<WobblyText headline={true}>{thread.title}</WobblyText>}
+        subtitle={<WobblyText subhead={true}>{`${mostRecentAuthor}: ${mostRecentPost}`}</WobblyText>}
         onPress={onPress}
         onLongPress={this.onLongPress}
         bottomDivider={true}

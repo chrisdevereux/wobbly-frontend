@@ -7,6 +7,7 @@ import HeaderButtons from "react-navigation-header-buttons";
 import { NavigationService } from "../../services";
 import { createNavigatorFunction } from "../../util";
 import { WobblyButton } from "../atoms";
+import { Intent } from "../atoms/WobblyButton";
 import { WobblyHeaderButtons } from "../molecules";
 import { UpdatePersonForm } from "../organisms";
 
@@ -32,7 +33,7 @@ class AccountScreen extends React.Component<IAccountScreenProps> {
     return (
       <View>
         <UpdatePersonForm />
-        <WobblyButton onPress={this.logout}>{"Log out"}</WobblyButton>
+        <WobblyButton text="Log out" onPress={this.logout} intent={Intent.DANGER} />
       </View>
     );
   }

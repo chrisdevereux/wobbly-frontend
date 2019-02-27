@@ -1,7 +1,7 @@
 import { Formik, FormikProps } from "formik";
 import { get } from "lodash";
 import * as React from "react";
-import { ActivityIndicator, View } from "react-native";
+import { View } from "react-native";
 import * as yup from "yup";
 
 import {
@@ -11,8 +11,8 @@ import {
   UpdatePersonMutationResult
 } from "../../graphql/mutations";
 import { OWN_INFO_QUERY, OwnInfoQuery, OwnInfoQueryResult } from "../../graphql/queries";
-import { colors } from "../../style/common";
 import { FormErrors, FormField, FormLabel, WobblyButton } from "../atoms";
+import { Intent } from "../atoms/WobblyButton";
 
 interface IUpdatePersonFormFields {
   // TODO: profile image
@@ -56,14 +56,14 @@ class UpdatePersonForm extends React.Component<IUpdatePersonFormProps> {
               )}
             />
             <FormLabel>Name</FormLabel>
-            <FormField
-              onChangeText={formikBag.handleChange("name")}
-              value={formikBag.values.name}
-              backgroundColor={colors.lightGray1}
+            <FormField onChangeText={formikBag.handleChange("name")} value={formikBag.values.name} />
+            <WobblyButton
+              text="Submit"
+              isLoading={updatePersonResult.loading}
+              intent={Intent.PRIMARY}
+              onPress={formikBag.handleSubmit}
+              disabled={updatePersonResult.loading}
             />
-            <WobblyButton onPress={formikBag.handleSubmit} disabled={updatePersonResult.loading}>
-              {updatePersonResult.loading ? <ActivityIndicator /> : "Submit"}
-            </WobblyButton>
           </View>
         )}
       </Formik>

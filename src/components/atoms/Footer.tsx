@@ -1,7 +1,9 @@
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { colors } from "../../style/common";
+
+import WobblyText from "./WobblyText";
 
 interface IFooterProps {
   text: string;
@@ -9,7 +11,7 @@ interface IFooterProps {
 }
 const Footer: React.SFC<IFooterProps> = ({ text, button }) => (
   <View style={style.container}>
-    <Text style={style.text}>{text}</Text>
+    <WobblyText style={style.text}>{text}</WobblyText>
     {button}
   </View>
 );

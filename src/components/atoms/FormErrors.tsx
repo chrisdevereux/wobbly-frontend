@@ -1,7 +1,9 @@
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { colors } from "../../style/common";
+
+import WobblyText from "./WobblyText";
 
 interface IFormErrorsProps {
   errors: Array<string | undefined>;
@@ -12,9 +14,9 @@ const FormErrors: React.SFC<IFormErrorsProps> = ({ errors }) => {
     <View style={style.formErrors}>
       {filteredErrors &&
         filteredErrors.map((error: string, idx: number) => (
-          <Text key={`${idx}-${error}`} style={style.formErrorText}>
+          <WobblyText key={`${idx}-${error}`} style={style.formErrorText} callout={true}>
             {error}
-          </Text>
+          </WobblyText>
         ))}
     </View>
   );
@@ -25,7 +27,7 @@ const style = StyleSheet.create({
     padding: 10
   },
   formErrorText: {
-    color: colors.red5
+    color: colors.red3
   }
 });
 

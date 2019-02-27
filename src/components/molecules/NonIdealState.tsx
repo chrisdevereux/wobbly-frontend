@@ -13,7 +13,7 @@ interface INonIdealStateProps {
 const NonIdealState: React.SFC<INonIdealStateProps> = ({ IconFamily, iconName, title, subtitle }) => (
   <View style={style.container}>
     <IconFamily name={iconName} size={50} color={colors.gray1} />
-    <WobblyText h4={true} style={style.title}>
+    <WobblyText title2={true} style={style.title}>
       {title}
     </WobblyText>
     {subtitle && <WobblyText style={style.subtitle}>{subtitle}</WobblyText>}

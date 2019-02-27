@@ -49,7 +49,7 @@ export default SearchBar;
 const styles = StyleSheet.create({
   searchBar: {
     flexDirection: "row",
-    backgroundColor: colors.lightGray3,
+    backgroundColor: colors.lightGray4,
     borderRadius: 10,
     margin: 10
   },

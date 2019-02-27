@@ -29,6 +29,16 @@ export const CREATE_GROUP_MUTATION = gql`
   }
 `;
 
+export const UPDATE_GROUP_MUTATION = gql`
+  mutation updateGroup($groupId: ID!, $name: String, $description: String) {
+    updateGroup(groupId: $groupId, name: $name, description: $description) {
+      name
+      description
+      id
+    }
+  }
+`;
+
 export const JOIN_GROUP_MUTATION = gql`
   mutation joinGroup($groupId: ID!) {
     joinGroup(groupId: $groupId) {

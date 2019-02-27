@@ -10,6 +10,7 @@ import { leaveGroup, leaveGroupVariables } from "../../generated/leaveGroup";
 import { login, loginVariables } from "../../generated/login";
 import { signup, signupVariables } from "../../generated/signup";
 import { toggleThreadPinning, toggleThreadPinningVariables } from "../../generated/toggleThreadPinning";
+import { updateGroup, updateGroupVariables } from "../../generated/updateGroup";
 import { updatePerson, updatePersonVariables } from "../../generated/updatePerson";
 
 export class SignupMutation extends Mutation<signup, signupVariables> {}
@@ -42,6 +43,11 @@ export class CreateGroupMutation extends Mutation<createGroup, createGroupVariab
 export type CreateGroupMutationFn = MutationFn<createGroup, createGroupVariables>;
 export type CreateGroupMutationResult = MutationResult<createGroup>;
 export type CreateGroupMutationUpdaterFn = MutationUpdaterFn<createGroup>;
+
+export class UpdateGroupMutation extends Mutation<updateGroup, updateGroupVariables> {}
+export type UpdateGroupMutationFn = MutationFn<updateGroup, updateGroupVariables>;
+export type UpdateGroupMutationResult = MutationResult<updateGroup>;
+export type UpdateGroupMutationUpdaterFn = MutationUpdaterFn<updateGroup>;
 
 export class CreateThreadMutation extends Mutation<createThread, createThreadVariables> {}
 export type CreateThreadMutationFn = MutationFn<createThread, createThreadVariables>;

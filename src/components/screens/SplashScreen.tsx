@@ -1,9 +1,9 @@
 import { SecureStore } from "expo";
 import * as React from "react";
-import { SafeAreaView, StyleSheet, Text } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import { NavigationInjectedProps } from "react-navigation";
 
-import { standardColors } from "../../style/common";
+import { colors } from "../../style/common";
 
 type ISplashScreenProps = Partial<NavigationInjectedProps>;
 
@@ -18,11 +18,7 @@ class SplashScreen extends React.PureComponent<ISplashScreenProps> {
   }
 
   public render() {
-    return (
-      <SafeAreaView style={style.wrapper}>
-        <Text style={style.text}>Wobbly</Text>
-      </SafeAreaView>
-    );
+    return <SafeAreaView style={style.wrapper} />;
   }
 
   private bootstrap = async () => {
@@ -45,9 +41,6 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: standardColors.primaryButtonBackground
-  },
-  text: {
-    color: standardColors.primaryText
+    backgroundColor: colors.red1
   }
 });

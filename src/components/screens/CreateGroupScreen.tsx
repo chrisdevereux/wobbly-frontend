@@ -3,7 +3,7 @@ import { Formik, FormikProps } from "formik";
 import hoistNonReactStatics from "hoist-non-react-statics";
 import { values } from "lodash";
 import * as React from "react";
-import { ActivityIndicator, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as yup from "yup";
 
 import { getGroups } from "../../generated/getGroups";
@@ -17,6 +17,7 @@ import {
 import { GROUPS_QUERY } from "../../graphql/queries";
 import { NavigationService } from "../../services";
 import { FormErrors, FormField, FormLabel, WobblyButton } from "../atoms";
+import { Intent } from "../atoms/WobblyButton";
 
 interface ICreateGroupFormFields {
   name: string;
@@ -50,16 +51,25 @@ class CreateGroupScreen extends React.Component<ICreateGroupScreenProps> {
         })}
       >
         {(formikBag: FormikProps<ICreateGroupFormFields>) => (
-          <View>
+          <KeyboardAwareScrollView>
             <FormErrors errors={values(formikBag.errors)} />
             <FormLabel>Group name</FormLabel>
             <FormField onChangeText={formikBag.handleChange("name")} value={formikBag.values.name} />
             <FormLabel>Description</FormLabel>
-            <FormField onChangeText={formikBag.handleChange("description")} value={formikBag.values.description} />
-            <WobblyButton onPress={formikBag.handleSubmit} disabled={result.loading}>
-              {result.loading ? <ActivityIndicator /> : "Submit"}
-            </WobblyButton>
-          </View>
+            <FormField
+              onChangeText={formikBag.handleChange("description")}
+              value={formikBag.values.description}
+              multiline={true}
+              multilineGrow={true}
+            />
+            <WobblyButton
+              text="Submit"
+              isLoading={result.loading}
+              intent={Intent.PRIMARY}
+              onPress={formikBag.handleSubmit}
+              disabled={result.loading}
+            />
+          </KeyboardAwareScrollView>
         )}
       </Formik>
     );

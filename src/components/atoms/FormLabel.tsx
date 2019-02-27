@@ -1,18 +1,17 @@
 import * as React from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { standardColors } from "../../style/common";
+import WobblyText from "./WobblyText";
 
 interface IFormLabelProps {
   children: string;
 }
 
-const FormLabel = ({ children }: IFormLabelProps) => <Text style={style.label}>{children}</Text>;
+const FormLabel = ({ children }: IFormLabelProps) => <WobblyText style={style.label}>{children}</WobblyText>;
 export default FormLabel;
 
 const style = StyleSheet.create({
   label: {
-    color: standardColors.primaryText,
     marginLeft: 8,
     marginRight: 8
   }

@@ -112,8 +112,10 @@ export default class App extends React.Component<{}, IAppState> {
   private async initFonts() {
     await Font.loadAsync({
       "open-sans-regular": require("../assets/fonts/OpenSans-Regular.ttf"),
-      "open-sans-semi-bold": require("../assets/fonts/OpenSans-SemiBold.ttf"),
-      "montserrat-regular": require("../assets/fonts/Montserrat-Regular.ttf")
+      "open-sans-bold": require("../assets/fonts/OpenSans-Bold.ttf"),
+      "montserrat-regular": require("../assets/fonts/Montserrat-Regular.ttf"),
+      "montserrat-bold": require("../assets/fonts/Montserrat-Bold.ttf"),
+      "montserrat-black": require("../assets/fonts/Montserrat-Black.ttf")
     });
     this.setState({ fontsHaveLoaded: true });
   }

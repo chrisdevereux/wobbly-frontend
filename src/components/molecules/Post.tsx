@@ -37,9 +37,12 @@ class Post extends React.PureComponent<MessageProps> {
     if (this.props.renderAvatar) {
       return this.props.renderAvatar(avatarProps);
     }
-    // Only show avatar for first message in a series
+    // Only show avatar for first message in a series, or if it's a new day
     let heightStyle;
-    if (isSameUser(this.props.currentMessage, this.props.previousMessage)) {
+    if (
+      isSameUser(this.props.currentMessage, this.props.previousMessage) &&
+      isSameDay(this.props.currentMessage, this.props.previousMessage)
+    ) {
       heightStyle = { height: 0 };
     }
     return <Avatar {...avatarProps} imageStyle={{ left: [style.avatar, heightStyle], right: [] }} />;

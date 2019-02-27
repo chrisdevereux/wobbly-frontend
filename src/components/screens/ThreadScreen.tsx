@@ -3,6 +3,7 @@ import { remove } from "lodash";
 import * as React from "react";
 import { Platform, SafeAreaView, StyleSheet } from "react-native";
 import { GiftedChat, IMessage, MessageProps } from "react-native-gifted-chat";
+import { getBottomSpace, isIphoneX } from "react-native-iphone-x-helper";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import { NavigationInjectedProps } from "react-navigation";
 
@@ -73,6 +74,7 @@ class ThreadScreen extends React.Component<IThreadScreenProps> {
           user={{ _id: person.id, name: person.name }}
           showAvatarForEveryMessage={true}
           renderMessage={this.renderMessage}
+          bottomOffset={isIphoneX() ? getBottomSpace() : undefined}
         />
         {Platform.OS === "android" ? <KeyboardSpacer /> : null}
       </SafeAreaView>

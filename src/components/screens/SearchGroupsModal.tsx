@@ -1,6 +1,6 @@
 import * as React from "react";
 import { withApollo, WithApolloClient } from "react-apollo";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Button } from "react-native-elements";
 
 import { searchGroups, searchGroups_searchGroups } from "../../generated/searchGroups";
@@ -8,6 +8,7 @@ import { SEARCH_GROUPS_QUERY } from "../../graphql/queries";
 import { NavigationService } from "../../services";
 import { colors } from "../../style/common";
 import { createNavigatorFunction } from "../../util";
+import WobblyText from "../atoms/WobblyText";
 import { CreateGroupFooter, SearchBar } from "../molecules";
 import { GroupsList, LoadingState } from "../organisms";
 
@@ -45,7 +46,7 @@ class SearchGroupsModal extends React.PureComponent<ISearchGroupsModalProps, ISe
     } else if (results !== undefined && results.length === 0) {
       content = (
         <View style={style.noResultsWrapper}>
-          <Text style={style.noResultsText}>No results</Text>
+          <WobblyText style={style.noResultsText}>No results</WobblyText>
         </View>
       );
     }

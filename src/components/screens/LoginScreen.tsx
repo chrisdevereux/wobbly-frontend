@@ -1,12 +1,12 @@
 import { Formik, FormikProps } from "formik";
 import { get, values } from "lodash";
 import * as React from "react";
-import { ActivityIndicator, KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 
 import { LOGIN_MUTATION, LoginMutation, LoginMutationFn, LoginMutationResult } from "../../graphql/mutations";
-import { colors } from "../../style/common";
 import { createNavigatorFunction, saveTokenAndRedirect } from "../../util";
 import { FormErrors, FormField, WobblyButton } from "../atoms";
+import { Intent } from "../atoms/WobblyButton";
 import WobblyText from "../atoms/WobblyText";
 
 export interface ILoginFormFields {
@@ -37,7 +37,7 @@ class LoginScreen extends React.PureComponent<ILoginScreenProps> {
     const isLoggingIn = this.props.result && this.props.result.loading;
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.welcome}>
-        <WobblyText h2={true} style={styles.welcomeHeading}>
+        <WobblyText title2={true} style={styles.welcomeHeading}>
           Login
         </WobblyText>
         <Formik
@@ -63,12 +63,14 @@ class LoginScreen extends React.PureComponent<ILoginScreenProps> {
                 secureTextEntry={true}
                 placeholder="Password"
               />
-              <WobblyButton onPress={formikBag.handleSubmit} disabled={isLoggingIn}>
-                {isLoggingIn ? <ActivityIndicator /> : "Log in"}
-              </WobblyButton>
-              <WobblyButton onPress={goToWelcome} disabled={isLoggingIn}>
-                Cancel
-              </WobblyButton>
+              <WobblyButton
+                text="Log in"
+                isLoading={isLoggingIn}
+                intent={Intent.PRIMARY}
+                onPress={formikBag.handleSubmit}
+                disabled={isLoggingIn}
+              />
+              <WobblyButton text="Cancel" onPress={goToWelcome} disabled={isLoggingIn} minimal={true} />
             </View>
           )}
         </Formik>
@@ -101,12 +103,10 @@ const styles = StyleSheet.create({
   welcome: {
     flex: 1,
     padding: 20,
-    backgroundColor: colors.darkGray1,
     justifyContent: "space-around"
   },
   welcomeHeading: {
     textAlign: "center",
-    color: colors.white,
     marginBottom: 10
   }
 });
