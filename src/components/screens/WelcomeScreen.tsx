@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet } from "react-native";
 
 import { createNavigatorFunction } from "../../util";
 import { WobblyButton } from "../atoms";
@@ -14,15 +14,16 @@ class WelcomeScreen extends React.PureComponent {
 
   public render() {
     return (
-      <View style={styles.welcome}>
+      <SafeAreaView style={styles.welcome}>
         <WobblyText largeTitle={true} style={styles.welcomeHeading}>
           Wobbly
         </WobblyText>
+        <Image source={require("../../../assets/images/pluto/pluto-welcome.png")} style={styles.image} />
         <VerticalButtonGroup>
           <WobblyButton text="Sign up" intent={Intent.PRIMARY} onPress={createNavigatorFunction("Signup")} />
           <WobblyButton text="Login" onPress={createNavigatorFunction("Login")} minimal={true} />
         </VerticalButtonGroup>
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -33,10 +34,16 @@ const styles = StyleSheet.create({
   welcome: {
     flex: 1,
     padding: 20,
-    justifyContent: "space-around"
+    justifyContent: "space-evenly"
   },
   welcomeHeading: {
     textAlign: "center",
     marginBottom: 10
+  },
+  image: {
+    flex: 0,
+    width: "100%",
+    height: 300,
+    resizeMode: "contain"
   }
 });

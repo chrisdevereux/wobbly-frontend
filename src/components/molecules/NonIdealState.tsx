@@ -1,18 +1,20 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
 import { colors } from "../../style/common";
 import WobblyText from "../atoms/WobblyText";
 
 interface INonIdealStateProps {
-  IconFamily: React.ComponentType<any>;
-  iconName: string;
+  IconFamily?: React.ComponentType<any>;
+  iconName?: string;
+  imageRequire?: NodeRequire;
   title: string;
   subtitle?: string;
 }
-const NonIdealState: React.SFC<INonIdealStateProps> = ({ IconFamily, iconName, title, subtitle }) => (
+const NonIdealState: React.SFC<INonIdealStateProps> = ({ IconFamily, iconName, imageRequire, title, subtitle }) => (
   <View style={style.container}>
-    <IconFamily name={iconName} size={50} color={colors.gray1} />
+    {IconFamily && iconName && <IconFamily name={iconName} size={50} color={colors.gray1} />}
+    {imageRequire && <Image source={imageRequire} style={style.image} />}
     <WobblyText title2={true} style={style.title}>
       {title}
     </WobblyText>
@@ -30,6 +32,12 @@ const style = StyleSheet.create({
   title: {
     marginVertical: 5,
     color: colors.gray1
+  },
+  image: {
+    flex: 0,
+    width: "100%",
+    height: 250,
+    resizeMode: "contain"
   },
   subtitle: {
     color: colors.gray1,

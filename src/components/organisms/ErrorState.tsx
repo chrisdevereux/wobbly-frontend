@@ -1,4 +1,3 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import * as React from "react";
 
 import { NonIdealState } from "../molecules";
@@ -11,8 +10,7 @@ const ErrorState: React.FC<IErrorStateProps> = ({ title, subtitle }) => (
   <NonIdealState
     title={title || "An error occurred"}
     subtitle={subtitle}
-    IconFamily={MaterialIcons}
-    iconName="error-outline"
+    imageRequire={require("../../../assets/images/pluto/pluto-fatal-error.png")}
   />
 );
 export default ErrorState;

@@ -3,6 +3,7 @@ import { Formik, FormikProps } from "formik";
 import hoistNonReactStatics from "hoist-non-react-statics";
 import { values } from "lodash";
 import * as React from "react";
+import { Image, StyleSheet } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as yup from "yup";
 
@@ -37,41 +38,44 @@ class CreateGroupScreen extends React.Component<ICreateGroupScreenProps> {
   public render() {
     const { result } = this.props;
     return (
-      <Formik
-        ref={el => (this.createGroupForm = el)}
-        initialValues={{ name: "", description: "" }}
-        onSubmit={this.handleCreateGroup}
-        validateOnChange={false}
-        validationSchema={yup.object().shape({
-          name: yup
-            .string()
-            .min(10)
-            .required(),
-          description: yup.string().max(500)
-        })}
-      >
-        {(formikBag: FormikProps<ICreateGroupFormFields>) => (
-          <KeyboardAwareScrollView>
-            <FormErrors errors={values(formikBag.errors)} />
-            <FormLabel>Group name</FormLabel>
-            <FormField onChangeText={formikBag.handleChange("name")} value={formikBag.values.name} />
-            <FormLabel>Description</FormLabel>
-            <FormField
-              onChangeText={formikBag.handleChange("description")}
-              value={formikBag.values.description}
-              multiline={true}
-              multilineGrow={true}
-            />
-            <WobblyButton
-              text="Submit"
-              isLoading={result.loading}
-              intent={Intent.PRIMARY}
-              onPress={formikBag.handleSubmit}
-              disabled={result.loading}
-            />
-          </KeyboardAwareScrollView>
-        )}
-      </Formik>
+      <KeyboardAwareScrollView>
+        <Image source={require("../../../assets/images/pluto/pluto-uploading-1.png")} style={style.image} />
+        <Formik
+          ref={el => (this.createGroupForm = el)}
+          initialValues={{ name: "", description: "" }}
+          onSubmit={this.handleCreateGroup}
+          validateOnChange={false}
+          validationSchema={yup.object().shape({
+            name: yup
+              .string()
+              .min(10)
+              .required(),
+            description: yup.string().max(500)
+          })}
+        >
+          {(formikBag: FormikProps<ICreateGroupFormFields>) => (
+            <KeyboardAwareScrollView>
+              <FormErrors errors={values(formikBag.errors)} />
+              <FormLabel>Group name</FormLabel>
+              <FormField onChangeText={formikBag.handleChange("name")} value={formikBag.values.name} />
+              <FormLabel>Description</FormLabel>
+              <FormField
+                onChangeText={formikBag.handleChange("description")}
+                value={formikBag.values.description}
+                multiline={true}
+                multilineGrow={true}
+              />
+              <WobblyButton
+                text="Submit"
+                isLoading={result.loading}
+                intent={Intent.PRIMARY}
+                onPress={formikBag.handleSubmit}
+                disabled={result.loading}
+              />
+            </KeyboardAwareScrollView>
+          )}
+        </Formik>
+      </KeyboardAwareScrollView>
     );
   }
 
@@ -92,6 +96,15 @@ class CreateGroupScreen extends React.Component<ICreateGroupScreenProps> {
   };
 }
 
+const style = StyleSheet.create({
+  image: {
+    flex: 0,
+    width: "100%",
+    height: 300,
+    resizeMode: "contain"
+  }
+});
+
 const updateCache: CreateGroupMutationUpdaterFn = (cache, { data }) => {
   const prevData = cache.readQuery<getGroups>({ query: GROUPS_QUERY });
   cache.writeQuery({
@@ -101,7 +114,6 @@ const updateCache: CreateGroupMutationUpdaterFn = (cache, { data }) => {
     }
   });
 };
-
 const EnhancedComponent = () => (
   <CreateGroupMutation mutation={CREATE_GROUP_MUTATION} update={updateCache}>
     {(createGroup, result) => <CreateGroupScreen createGroup={createGroup} result={result} />}

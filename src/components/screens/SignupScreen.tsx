@@ -1,14 +1,15 @@
 import { Formik, FormikProps } from "formik";
+import hoistNonReactStatics from "hoist-non-react-statics";
 import { get, values } from "lodash";
 import * as React from "react";
-import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as yup from "yup";
 
 import { SIGNUP_MUTATION, SignupMutation, SignupMutationFn, SignupMutationResult } from "../../graphql/mutations";
 import { createNavigatorFunction, saveTokenAndRedirect } from "../../util";
 import { FormErrors, FormField, WobblyButton } from "../atoms";
 import { Intent } from "../atoms/WobblyButton";
-import WobblyText from "../atoms/WobblyText";
 
 interface ISignupFormFields {
   email: string;
@@ -17,12 +18,16 @@ interface ISignupFormFields {
   passwordConfirmation: string;
 }
 
-interface ISignupFormProps {
+interface ISignupScreenProps {
   signup: SignupMutationFn;
   result: SignupMutationResult;
 }
 
-class SignupForm extends React.PureComponent<ISignupFormProps> {
+class SignupScreen extends React.PureComponent<ISignupScreenProps> {
+  public static navigationOptions = {
+    title: "Sign up"
+  };
+
   private signupForm?: Formik<ISignupFormFields> | null;
 
   public componentDidUpdate() {
@@ -35,82 +40,82 @@ class SignupForm extends React.PureComponent<ISignupFormProps> {
   public render() {
     const isSigningUp = this.props.result && this.props.result.loading;
     return (
-      <KeyboardAvoidingView behavior="padding" style={styles.welcome}>
-        <WobblyText title2={true} style={styles.welcomeHeading}>
-          Sign up
-        </WobblyText>
-        <Formik
-          ref={el => (this.signupForm = el)}
-          initialValues={{ email: "", displayName: "", password: "", passwordConfirmation: "" }}
-          onSubmit={this.processSignup}
-          validateOnChange={false}
-          validationSchema={yup.object().shape({
-            email: yup
-              .string()
-              .email("Invalid email")
-              .required("Email is required"),
-            displayName: yup
-              .string()
-              .min(3, "Name must be more than 3 characters")
-              .max(50, "Name must be fewer than 50 characters")
-              .required("A display name is required"),
-            password: yup
-              .string()
-              .min(10, "Password must be at least 10 characters")
-              .required("Password is required"),
-            passwordConfirmation: yup
-              .string()
-              .oneOf([yup.ref("password")], "Passwords do not match")
-              .required("Password confirmation is required")
-          })}
-        >
-          {(formikBag: FormikProps<ISignupFormFields>) => (
-            <View>
-              <FormErrors errors={values(formikBag.errors)} />
-              <FormField
-                onChangeText={formikBag.handleChange("email")}
-                value={formikBag.values.email}
-                autoCapitalize="none"
-                placeholder="Email"
-                keyboardType="email-address"
-              />
-              <FormField
-                onChangeText={formikBag.handleChange("displayName")}
-                autoCapitalize="none"
-                value={formikBag.values.displayName}
-                placeholder="Display name"
-              />
-              <FormField
-                onChangeText={formikBag.handleChange("password")}
-                autoCapitalize="none"
-                value={formikBag.values.password}
-                secureTextEntry={true}
-                placeholder="Password"
-              />
-              <FormField
-                onChangeText={formikBag.handleChange("passwordConfirmation")}
-                autoCapitalize="none"
-                value={formikBag.values.passwordConfirmation}
-                secureTextEntry={true}
-                placeholder="Confirm password"
-              />
-              <WobblyButton
-                text="Sign up"
-                isLoading={isSigningUp}
-                intent={Intent.PRIMARY}
-                onPress={formikBag.handleSubmit}
-                disabled={isSigningUp}
-              />
-              <WobblyButton
-                text="Cancel"
-                onPress={createNavigatorFunction("Welcome")}
-                disabled={isSigningUp}
-                minimal={true}
-              />
-            </View>
-          )}
-        </Formik>
-      </KeyboardAvoidingView>
+      <View style={styles.welcome}>
+        <KeyboardAwareScrollView>
+          <Image source={require("../../../assets/images/pluto/pluto-sign-up.png")} style={styles.image} />
+          <Formik
+            ref={el => (this.signupForm = el)}
+            initialValues={{ email: "", displayName: "", password: "", passwordConfirmation: "" }}
+            onSubmit={this.processSignup}
+            validateOnChange={false}
+            validationSchema={yup.object().shape({
+              email: yup
+                .string()
+                .email("Invalid email")
+                .required("Email is required"),
+              displayName: yup
+                .string()
+                .min(3, "Name must be more than 3 characters")
+                .max(50, "Name must be fewer than 50 characters")
+                .required("A display name is required"),
+              password: yup
+                .string()
+                .min(10, "Password must be at least 10 characters")
+                .required("Password is required"),
+              passwordConfirmation: yup
+                .string()
+                .oneOf([yup.ref("password")], "Passwords do not match")
+                .required("Password confirmation is required")
+            })}
+          >
+            {(formikBag: FormikProps<ISignupFormFields>) => (
+              <View>
+                <FormErrors errors={values(formikBag.errors)} />
+                <FormField
+                  onChangeText={formikBag.handleChange("email")}
+                  value={formikBag.values.email}
+                  autoCapitalize="none"
+                  placeholder="Email"
+                  keyboardType="email-address"
+                />
+                <FormField
+                  onChangeText={formikBag.handleChange("displayName")}
+                  autoCapitalize="none"
+                  value={formikBag.values.displayName}
+                  placeholder="Display name"
+                />
+                <FormField
+                  onChangeText={formikBag.handleChange("password")}
+                  autoCapitalize="none"
+                  value={formikBag.values.password}
+                  secureTextEntry={true}
+                  placeholder="Password"
+                />
+                <FormField
+                  onChangeText={formikBag.handleChange("passwordConfirmation")}
+                  autoCapitalize="none"
+                  value={formikBag.values.passwordConfirmation}
+                  secureTextEntry={true}
+                  placeholder="Confirm password"
+                />
+                <WobblyButton
+                  text="Sign up"
+                  isLoading={isSigningUp}
+                  intent={Intent.PRIMARY}
+                  onPress={formikBag.handleSubmit}
+                  disabled={isSigningUp}
+                />
+                <WobblyButton
+                  text="Cancel"
+                  onPress={createNavigatorFunction("Welcome")}
+                  disabled={isSigningUp}
+                  minimal={true}
+                />
+              </View>
+            )}
+          </Formik>
+        </KeyboardAwareScrollView>
+      </View>
     );
   }
 
@@ -134,7 +139,13 @@ const styles = StyleSheet.create({
   welcome: {
     flex: 1,
     padding: 20,
-    justifyContent: "space-around"
+    justifyContent: "center"
+  },
+  image: {
+    flex: 0,
+    height: 250,
+    width: "100%",
+    resizeMode: "contain"
   },
   welcomeHeading: {
     textAlign: "center",
@@ -142,8 +153,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default () => (
+const EnhancedComponent = () => (
   <SignupMutation mutation={SIGNUP_MUTATION}>
-    {(signup, result) => <SignupForm signup={signup} result={result} />}
+    {(signup, result) => <SignupScreen signup={signup} result={result} />}
   </SignupMutation>
 );
+
+export default hoistNonReactStatics(EnhancedComponent, SignupScreen);
