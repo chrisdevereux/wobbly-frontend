@@ -1,7 +1,7 @@
 import { SecureStore } from "expo";
 import * as React from "react";
 import { withApollo, WithApolloClient } from "react-apollo";
-import { View } from "react-native";
+import { ScrollView } from "react-native";
 import HeaderButtons from "react-navigation-header-buttons";
 
 import { NavigationService } from "../../services";
@@ -30,10 +30,10 @@ class AccountScreen extends React.Component<IAccountScreenProps> {
 
   public render() {
     return (
-      <View>
+      <ScrollView>
         <UpdatePersonForm />
         <WobblyButton onPress={this.logout}>{"Log out"}</WobblyButton>
-      </View>
+      </ScrollView>
     );
   }
 

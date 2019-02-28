@@ -1,7 +1,7 @@
 import { Formik, FormikProps } from "formik";
 import { get } from "lodash";
 import * as React from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import * as yup from "yup";
 
 import {
@@ -18,7 +18,10 @@ interface IUpdatePersonFormFields {
   // TODO: profile image
   // TODO: change password
   // TODO: change email
-  name: string;
+  name: string,
+  oldPassword: string,
+  newPassword: string,
+  confirmPassword: string,
 }
 
 interface IUpdatePersonFormProps {
@@ -36,7 +39,7 @@ class UpdatePersonForm extends React.Component<IUpdatePersonFormProps> {
     return (
       <Formik
         ref={el => (this.updatePersonForm = el)}
-        initialValues={{ name }}
+        initialValues={{ name, oldPassword: '', newPassword: '', confirmPassword: '' }}
         enableReinitialize={true} // required for `initialValues` to update when the query completes
         onSubmit={this.handleSubmit}
         validateOnChange={false}
@@ -50,6 +53,12 @@ class UpdatePersonForm extends React.Component<IUpdatePersonFormProps> {
       >
         {(formikBag: FormikProps<IUpdatePersonFormFields>) => (
           <View>
+            <Text
+              style={{
+                marginTop: 20,
+                marginLeft: 8,
+                fontWeight: "bold",
+              }}>Edit Details</Text>
             <FormErrors
               errors={get(this.props.updatePersonResult, "errors.graphQLErrors", []).map(
                 (e: any) => e.message || undefined
@@ -59,6 +68,43 @@ class UpdatePersonForm extends React.Component<IUpdatePersonFormProps> {
             <FormField
               onChangeText={formikBag.handleChange("name")}
               value={formikBag.values.name}
+              backgroundColor={colors.lightGray1}
+            />
+            <View
+              style={{
+                marginTop: 20,
+                marginHorizontal: 20,
+                borderBottomColor: 'gray',
+                borderBottomWidth: 1,
+              }}
+            />
+            <Text
+              style={{
+                marginTop: 20,
+                marginLeft: 8,
+                fontWeight: "bold",
+              }}>Change Password</Text>
+            <FormErrors
+              errors={get(this.props.updatePersonResult, "errors.graphQLErrors", []).map(
+                (e: any) => e.message || undefined
+              )}
+            />
+            <FormLabel>Old Password</FormLabel>
+            <FormField
+              onChangeText={formikBag.handleChange("oldPassword")}
+              value={formikBag.values.oldPassword}
+              backgroundColor={colors.lightGray1}
+            />
+            <FormLabel>New Password</FormLabel>
+            <FormField
+              onChangeText={formikBag.handleChange("newPassword")}
+              value={formikBag.values.newPassword}
+              backgroundColor={colors.lightGray1}
+            />
+            <FormLabel>Confirm</FormLabel>
+            <FormField
+              onChangeText={formikBag.handleChange("confirmPassword")}
+              value={formikBag.values.confirmPassword}
               backgroundColor={colors.lightGray1}
             />
             <WobblyButton onPress={formikBag.handleSubmit} disabled={updatePersonResult.loading}>
@@ -71,10 +117,13 @@ class UpdatePersonForm extends React.Component<IUpdatePersonFormProps> {
   }
 
   private handleSubmit = (vals: IUpdatePersonFormFields) => {
+    const { confirmPassword, name, oldPassword, newPassword } = vals;
     this.props
       .updatePerson({
         variables: {
-          name: vals.name
+          name,
+          newPassword,
+          oldPassword
         }
       })
       .catch(e => {
