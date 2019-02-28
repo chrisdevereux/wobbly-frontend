@@ -6,7 +6,7 @@ import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
-import { Asset, Font, SecureStore } from "expo";
+import { Font, SecureStore } from "expo";
 import * as React from "react";
 import { ApolloProvider } from "react-apollo";
 import { NavigationContainerComponent } from "react-navigation";
@@ -20,24 +20,22 @@ import { NavigationService } from "./services";
 interface IAppState {
   clientHasLoaded: boolean;
   fontsHaveLoaded: boolean;
-  imagesHaveLoaded: boolean;
 }
 export default class App extends React.Component<{}, IAppState> {
   private client?: ApolloClient<any>;
 
   public constructor(props: {}) {
     super(props);
-    this.state = { clientHasLoaded: false, fontsHaveLoaded: false, imagesHaveLoaded: false };
+    this.state = { clientHasLoaded: false, fontsHaveLoaded: false };
   }
 
   public async componentDidMount() {
     await this.initClient();
     await this.initFonts();
-    await this.initImages();
   }
 
   public render() {
-    if (!this.state.clientHasLoaded || !this.state.fontsHaveLoaded || !this.state.imagesHaveLoaded || !this.client) {
+    if (!this.state.clientHasLoaded || !this.state.fontsHaveLoaded || !this.client) {
       return <SplashScreen />;
     }
     const navigationPersistenceKey = __DEV__ ? "NavigationStateDEV" : null;
@@ -66,7 +64,7 @@ export default class App extends React.Component<{}, IAppState> {
     const protocol = __DEV__ ? "http" : "https";
     // 10.0.3.2 is the IP of the host machine that Genymotion runs on
     // If running on a real device, set this to the local IP of your machine
-    const serverHost = __DEV__ ? "192.168.1.169" : "staging.wobbly.app";
+    const serverHost = __DEV__ ? "10.0.3.2" : "staging.wobbly.app";
     const httpPort = __DEV__ ? "4000" : "443";
     const httpLink = createHttpLink({
       uri: `${protocol}://${serverHost}:${httpPort}`
@@ -120,20 +118,5 @@ export default class App extends React.Component<{}, IAppState> {
       "montserrat-black": require("../assets/fonts/Montserrat-Black.ttf")
     });
     this.setState({ fontsHaveLoaded: true });
-  }
-
-  private async initImages() {
-    await Asset.loadAsync([
-      require("../assets/images/pluto/pluto-welcome.png"),
-      require("../assets/images/pluto/pluto-sign-up.png"),
-      require("../assets/images/pluto/pluto-searching.png"),
-      require("../assets/images/pluto/pluto-downloading.png"),
-      require("../assets/images/pluto/pluto-sign-in.png"),
-      require("../assets/images/pluto/list-is-empty-3.png"),
-      require("../assets/images/pluto/pluto-uploading-1.png"),
-      require("../assets/images/pluto/pluto-page-under-construction.png"),
-      require("../assets/images/pluto/pluto-fatal-error.png")
-    ]);
-    this.setState({ imagesHaveLoaded: true });
   }
 }

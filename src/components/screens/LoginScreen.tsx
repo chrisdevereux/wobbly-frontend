@@ -1,14 +1,13 @@
 import { Formik, FormikProps } from "formik";
-import hoistNonReactStatics from "hoist-non-react-statics";
 import { get, values } from "lodash";
 import * as React from "react";
-import { Image, StyleSheet, View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 
 import { LOGIN_MUTATION, LoginMutation, LoginMutationFn, LoginMutationResult } from "../../graphql/mutations";
 import { createNavigatorFunction, saveTokenAndRedirect } from "../../util";
 import { FormErrors, FormField, WobblyButton } from "../atoms";
 import { Intent } from "../atoms/WobblyButton";
+import WobblyText from "../atoms/WobblyText";
 
 export interface ILoginFormFields {
   email: string;
@@ -22,7 +21,7 @@ interface ILoginScreenProps {
 
 class LoginScreen extends React.PureComponent<ILoginScreenProps> {
   public static navigationOptions = {
-    title: "Login"
+    header: null
   };
   private loginForm?: Formik<ILoginFormFields> | null;
 
@@ -37,45 +36,45 @@ class LoginScreen extends React.PureComponent<ILoginScreenProps> {
     const goToWelcome = createNavigatorFunction("Welcome");
     const isLoggingIn = this.props.result && this.props.result.loading;
     return (
-      <KeyboardAwareScrollView>
-        <View style={styles.welcome}>
-          <Image source={require("../../../assets/images/pluto/pluto-sign-in.png")} style={styles.image} />
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            onSubmit={this.handleLogin}
-            validateOnChange={false}
-            ref={el => (this.loginForm = el)}
-          >
-            {(formikBag: FormikProps<ILoginFormFields>) => (
-              <View>
-                <FormErrors errors={values(formikBag.errors)} />
-                <FormField
-                  autoCapitalize="none"
-                  onChangeText={formikBag.handleChange("email")}
-                  value={formikBag.values.email}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                />
-                <FormField
-                  autoCapitalize="none"
-                  onChangeText={formikBag.handleChange("password")}
-                  value={formikBag.values.password}
-                  secureTextEntry={true}
-                  placeholder="Password"
-                />
-                <WobblyButton
-                  text="Log in"
-                  isLoading={isLoggingIn}
-                  intent={Intent.PRIMARY}
-                  onPress={formikBag.handleSubmit}
-                  disabled={isLoggingIn}
-                />
-                <WobblyButton text="Cancel" onPress={goToWelcome} disabled={isLoggingIn} minimal={true} />
-              </View>
-            )}
-          </Formik>
-        </View>
-      </KeyboardAwareScrollView>
+      <KeyboardAvoidingView behavior="padding" style={styles.welcome}>
+        <WobblyText title2={true} style={styles.welcomeHeading}>
+          Login
+        </WobblyText>
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          onSubmit={this.handleLogin}
+          validateOnChange={false}
+          ref={el => (this.loginForm = el)}
+        >
+          {(formikBag: FormikProps<ILoginFormFields>) => (
+            <View>
+              <FormErrors errors={values(formikBag.errors)} />
+              <FormField
+                autoCapitalize="none"
+                onChangeText={formikBag.handleChange("email")}
+                value={formikBag.values.email}
+                placeholder="Email"
+                keyboardType="email-address"
+              />
+              <FormField
+                autoCapitalize="none"
+                onChangeText={formikBag.handleChange("password")}
+                value={formikBag.values.password}
+                secureTextEntry={true}
+                placeholder="Password"
+              />
+              <WobblyButton
+                text="Log in"
+                isLoading={isLoggingIn}
+                intent={Intent.PRIMARY}
+                onPress={formikBag.handleSubmit}
+                disabled={isLoggingIn}
+              />
+              <WobblyButton text="Cancel" onPress={goToWelcome} disabled={isLoggingIn} minimal={true} />
+            </View>
+          )}
+        </Formik>
+      </KeyboardAvoidingView>
     );
   }
 
@@ -94,27 +93,20 @@ class LoginScreen extends React.PureComponent<ILoginScreenProps> {
   };
 }
 
+export default () => (
+  <LoginMutation mutation={LOGIN_MUTATION}>
+    {(login, result) => <LoginScreen login={login} result={result} />}
+  </LoginMutation>
+);
+
 const styles = StyleSheet.create({
   welcome: {
     flex: 1,
     padding: 20,
-    justifyContent: "center"
-  },
-  image: {
-    flex: 0,
-    height: 250,
-    width: "100%",
-    resizeMode: "contain"
+    justifyContent: "space-around"
   },
   welcomeHeading: {
     textAlign: "center",
     marginBottom: 10
   }
 });
-
-const EnhancedComponent = () => (
-  <LoginMutation mutation={LOGIN_MUTATION}>
-    {(login, result) => <LoginScreen login={login} result={result} />}
-  </LoginMutation>
-);
-export default hoistNonReactStatics(EnhancedComponent, LoginScreen);

@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import hoistNonReactStatics from "hoist-non-react-statics";
 import * as React from "react";
 import HeaderButtons from "react-navigation-header-buttons";
@@ -41,7 +42,8 @@ class GroupsListScreen extends React.PureComponent<IGroupsListScreenProps> {
       <NonIdealState
         title="No groups"
         subtitle="Tap the search button above to find or create a new one!"
-        imageRequire={require("../../../assets/images/pluto/list-is-empty-3.png")}
+        IconFamily={MaterialCommunityIcons}
+        iconName={"border-none-variant"}
       />
     );
   }

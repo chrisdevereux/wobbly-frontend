@@ -1,8 +1,7 @@
 import { SecureStore } from "expo";
 import * as React from "react";
 import { withApollo, WithApolloClient } from "react-apollo";
-import { Image, StyleSheet } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { View } from "react-native";
 import HeaderButtons from "react-navigation-header-buttons";
 
 import { NavigationService } from "../../services";
@@ -32,11 +31,10 @@ class AccountScreen extends React.Component<IAccountScreenProps> {
 
   public render() {
     return (
-      <KeyboardAwareScrollView>
-        <Image source={require("../../../assets/images/pluto/pluto-page-under-construction.png")} style={style.image} />
+      <View>
         <UpdatePersonForm />
         <WobblyButton text="Log out" onPress={this.logout} intent={Intent.DANGER} />
-      </KeyboardAwareScrollView>
+      </View>
     );
   }
 
@@ -48,14 +46,5 @@ class AccountScreen extends React.Component<IAccountScreenProps> {
     NavigationService.navigate("Auth");
   };
 }
-
-const style = StyleSheet.create({
-  image: {
-    flex: 0,
-    width: "100%",
-    height: 250,
-    resizeMode: "contain"
-  }
-});
 
 export default withApollo(AccountScreen);

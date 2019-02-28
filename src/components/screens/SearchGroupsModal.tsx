@@ -1,21 +1,22 @@
 import * as React from "react";
 import { withApollo, WithApolloClient } from "react-apollo";
-import { Image, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Button } from "react-native-elements";
 
 import { searchGroups, searchGroups_searchGroups } from "../../generated/searchGroups";
 import { SEARCH_GROUPS_QUERY } from "../../graphql/queries";
 import { NavigationService } from "../../services";
+import { colors } from "../../style/common";
 import { createNavigatorFunction } from "../../util";
-import { CreateGroupFooter, NonIdealState, SearchBar } from "../molecules";
-import { ErrorState, GroupsList, LoadingState } from "../organisms";
+import WobblyText from "../atoms/WobblyText";
+import { CreateGroupFooter, SearchBar } from "../molecules";
+import { GroupsList, LoadingState } from "../organisms";
 
 interface ISearchGroupsModalProps extends WithApolloClient<{}> {}
 interface ISearchGroupsModalState {
   results?: searchGroups_searchGroups[];
   loading: boolean;
   query: string;
-  error: boolean;
 }
 
 class SearchGroupsModal extends React.PureComponent<ISearchGroupsModalProps, ISearchGroupsModalState> {
@@ -30,7 +31,7 @@ class SearchGroupsModal extends React.PureComponent<ISearchGroupsModalProps, ISe
 
   public constructor(props: ISearchGroupsModalProps) {
     super(props);
-    this.state = { loading: false, query: "", error: false };
+    this.state = { loading: false, query: "" };
   }
 
   public render() {
@@ -44,15 +45,10 @@ class SearchGroupsModal extends React.PureComponent<ISearchGroupsModalProps, ISe
       content = <GroupsList groups={results} onPressFactory={this.onPressFactory as any} />;
     } else if (results !== undefined && results.length === 0) {
       content = (
-        <NonIdealState
-          title="No results"
-          imageRequire={require("../../../assets/images/pluto/pluto-downloading.png")}
-        />
+        <View style={style.noResultsWrapper}>
+          <WobblyText style={style.noResultsText}>No results</WobblyText>
+        </View>
       );
-    } else if (this.state.error) {
-      content = <ErrorState />;
-    } else {
-      content = <Image source={require("../../../assets/images/pluto/pluto-searching.png")} style={style.image} />;
     }
 
     if (results) {
@@ -62,10 +58,8 @@ class SearchGroupsModal extends React.PureComponent<ISearchGroupsModalProps, ISe
     return (
       <View style={style.container}>
         <SearchBar placeholder="Search for a group..." onSubmit={this.handleSearch} />
-        <View style={style.resultsContainer}>
-          {content}
-          {footer}
-        </View>
+        {content}
+        {footer}
       </View>
     );
   }
@@ -78,10 +72,6 @@ class SearchGroupsModal extends React.PureComponent<ISearchGroupsModalProps, ISe
         variables: { searchQuery }
       })
       .then(response => {
-        if (response.errors) {
-          this.setState({ error: true });
-          return;
-        }
         if (!response.data.searchGroups) {
           return;
         }
@@ -96,9 +86,6 @@ class SearchGroupsModal extends React.PureComponent<ISearchGroupsModalProps, ISe
             })),
           loading: false
         });
-      })
-      .catch(() => {
-        this.setState({ error: true });
       });
   };
 
@@ -111,15 +98,13 @@ const style = StyleSheet.create({
   container: {
     flex: 1
   },
-  resultsContainer: {
-    flex: 1,
-    justifyContent: "center"
+  noResultsWrapper: {
+    flex: 0.8,
+    justifyContent: "center",
+    alignItems: "center"
   },
-  image: {
-    flex: 0,
-    width: "100%",
-    height: 300,
-    resizeMode: "contain"
+  noResultsText: {
+    color: colors.darkGray5
   }
 });
 
