@@ -6,3 +6,4 @@ export { default as WobblyHeaderButton } from "./WobblyHeaderButton";
 export { default as Footer } from "./Footer";
 export { default as ListSection } from "./ListSection";
 export { default as PostBubble } from "./PostBubble";
+export { default as EditableTextView } from "./EditableTextView";

@@ -12,3 +12,5 @@ export { default as LoginScreen } from "./LoginScreen";
 export { default as CreateThreadScreen } from "./CreateThreadScreen";
 export { default as SettingsScreen } from "./SettingsScreen";
 export { default as ThreadScreen } from "./ThreadScreen";
+export { default as EditGroupNameModal } from "./EditGroupNameModal";
+export { default as EditGroupDescriptionModal } from "./EditGroupDescriptionModal";

@@ -12,6 +12,8 @@ import {
   AccountScreen,
   CreateGroupScreen,
   CreateThreadScreen,
+  EditGroupDescriptionModal,
+  EditGroupNameModal,
   GroupDetailsScreen,
   GroupsListScreen,
   JoinGroupScreen,
@@ -84,12 +86,24 @@ const AuthStack = createStackNavigator({
   Login: LoginScreen
 });
 
+// We have stack navigators for these (even though there isn't actually a stack)
+// because our `RootNavigator` has `headerMode: "none"`. Sub-navigators are responsible for
+// setting their own headers.
+const EditGroupNameStack = createStackNavigator({
+  EditGroupName: EditGroupNameModal
+});
+const EditGroupDescriptionStack = createStackNavigator({
+  EditGroupDescription: EditGroupDescriptionModal
+});
+
 // Put modals here (as long as they only need to be accessible from within `AppTabs`)
 const RootNavigator = createStackNavigator(
   {
     AppTabs,
     CreateNodeFlow,
-    CreateThreadFlow
+    CreateThreadFlow,
+    EditGroupNameStack,
+    EditGroupDescriptionStack
   },
   {
     mode: "modal",

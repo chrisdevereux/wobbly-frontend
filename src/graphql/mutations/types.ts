@@ -47,7 +47,6 @@ export type CreateGroupMutationUpdaterFn = MutationUpdaterFn<createGroup>;
 export class UpdateGroupMutation extends Mutation<updateGroup, updateGroupVariables> {}
 export type UpdateGroupMutationFn = MutationFn<updateGroup, updateGroupVariables>;
 export type UpdateGroupMutationResult = MutationResult<updateGroup>;
-export type UpdateGroupMutationUpdaterFn = MutationUpdaterFn<updateGroup>;
 
 export class CreateThreadMutation extends Mutation<createThread, createThreadVariables> {}
 export type CreateThreadMutationFn = MutationFn<createThread, createThreadVariables>;

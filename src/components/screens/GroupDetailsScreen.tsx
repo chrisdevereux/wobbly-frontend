@@ -2,7 +2,7 @@ import hoistNonReactStatics from "hoist-non-react-statics";
 import { inflect } from "inflection";
 import { remove } from "lodash";
 import * as React from "react";
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet } from "react-native";
 import { Image } from "react-native-elements";
 import { NavigationInjectedProps } from "react-navigation";
 
@@ -20,8 +20,7 @@ import {
 } from "../../graphql/mutations";
 import { GROUP_DETAILS_QUERY, GroupDetailsQuery, GroupDetailsQueryResult, GROUPS_QUERY } from "../../graphql/queries";
 import { NavigationService } from "../../services";
-import { colors } from "../../style/common";
-import { ListSection, WobblyButton } from "../atoms";
+import { EditableTextView, ListSection, WobblyButton } from "../atoms";
 import { Intent } from "../atoms/WobblyButton";
 import WobblyText from "../atoms/WobblyText";
 import { LoadingState, PersonList } from "../organisms";
@@ -43,12 +42,10 @@ class GroupDetailsScreen extends React.PureComponent<IGroupDetailsScreen> {
     };
   };
   private groupId: string;
-  private groupName: string;
 
   public constructor(props: IGroupDetailsScreen) {
     super(props);
     this.groupId = props.navigation.getParam("groupId", "");
-    this.groupName = props.navigation.getParam("groupName", "");
   }
 
   public render() {
@@ -60,10 +57,12 @@ class GroupDetailsScreen extends React.PureComponent<IGroupDetailsScreen> {
       return (
         <ScrollView style={style.container}>
           <Image source={{ uri: "https://placeimg.com/600/200/nature" }} style={style.groupImage} />
-          <WobblyText title1={true}>{this.groupName}</WobblyText>
-          <View style={style.description}>
+          <EditableTextView onPress={this.openEditNameModal}>
+            <WobblyText title1={true}>{group.name}</WobblyText>
+          </EditableTextView>
+          <EditableTextView onPress={this.openEditDescriptionModal}>
             <WobblyText>{group.description || "Add a description"}</WobblyText>
-          </View>
+          </EditableTextView>
           <ListSection>
             <WobblyText listHeading={true}>
               {`${members.length} ${inflect("member", members.length)}`.toUpperCase()}
@@ -75,6 +74,16 @@ class GroupDetailsScreen extends React.PureComponent<IGroupDetailsScreen> {
       );
     }
   }
+
+  private openEditNameModal = () => {
+    NavigationService.navigate("EditGroupName", { groupId: this.groupId });
+  };
+
+  private openEditDescriptionModal = () => {
+    NavigationService.navigate("EditGroupDescription", {
+      groupId: this.groupId
+    });
+  };
 
   private handleLeaveGroup = () => {
     const leaveGroup = () =>
@@ -99,13 +108,6 @@ const style = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 10,
     marginBottom: 10
-  },
-  description: {
-    marginTop: 10,
-    marginBottom: 20,
-    backgroundColor: colors.lightGray4,
-    padding: 10,
-    borderRadius: 10
   }
 });
 
